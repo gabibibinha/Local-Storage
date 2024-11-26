@@ -1,0 +1,15 @@
+input, button {
+    padding: 10px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+}
+
+form {
+    font-size: medium;
+    font-family: 'Raleway', sans-serif;
+}

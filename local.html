@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gerenciamento de Tarefas com Armazenamento Local</title>
+    <script src="localstorage.js" defer></script>
+    <link rel="stylesheet" href="localstorage.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <style>
+        #filter-button.active {
+          background-color: blue;
+          color: white;
+        }
+      </style>
+
+    <style>
+        #filter-priority-button.active {
+            background-color: blueviolet;
+            color: white;
+        }
+    </style>
+
+    <style>
+        .notification {
+            background-color: #ffcccb;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="preencher"></h1>
+    <form id="MeuFormulario">
+        <p>Bem-vindo ao sistema! Bora começar? </p>
+        <div>
+            <label for="NomedaTarefa">Nome da tarefa: </label>
+            <input type="text" id="NomedaTarefa" placeholder="Digite o nome da tarefa">
+        </div>
+
+        <div>
+            <label for="DataDeConclusao">Data de Conclusão: </label>
+            <input type="text" id="DataDeConclusao" placeholder="Digite a data de conclusão">
+        </div>
+        
+        <fieldset>
+            <legend>Selecione a prioridade do seu projeto: </legend>
+                <div>
+                    <label for="PrioridadeAlta">Alta</label>
+                    <input type="radio" id="priori1" name="alta" value="alta"/>
+                </div>
+
+                <div>
+                    <label for="PrioridadeMedia">Média</label>
+                    <input type="radio" id="priori2" name="media" value="media"/>
+                </div>
+
+                <div>
+                    <label for="PrioridadeBaixa">Baixa</label>
+                    <input type="radio" id="priori3" name="baixa" value="baixa"/>
+                </div>
+        </fieldset>
+
+        <div>
+            <input type="text" id="tarefaInput" placeholder="Digite sua tarefa">
+            <button type="button" id="adicionarTarefa">Adicionar tarefa</button>
+        </div>
+
+        <ul id="taskList">
+        </ul>
+        <button id="filter-button">Filtrar por status</button>
+
+        <button id="filter-priority-button">Filtrar por Prioridade</button>
+
+        <div id="editModal" style="display: none">
+            <h3>Editar Tarefa</h3>
+            <label>Nome: <input type="text" id="editName"></label><br>
+            <label>Data: <input type="date" id="editData"></label><br>
+            <label>Prioridade:
+                <select id="editPriority">
+                    <option value="BaixaP">Baixa</option>
+                    <option value="MediaP">Média</option>
+                    <option value="AltaP">Alta</option>
+                </select>
+            </label><br>
+            <button onclick="saveEdit()">Salvar</button>
+            <button onclick="closeModal()">Cancelar</button>
+        </div>
+
+        <div>
+            <button id="filter-all">Todas</button>
+            <button id="filter-completed">Concluídas</button>
+            <button id="filter-pending">Pendentes</button>
+            <button id="filter-high">Alta Prioridade</button>
+            <button id="filter-medium">Média Prioridade</button>
+            <button id="filter-low">Baixa Prioridade</button>
+        </div>
+
+        <div id="notifications"></div>
+        <script>
+            const tarefas = [
+                { id: 19, nome: 'Tarefa 19', prazo: '2024-11-07'},
+                { id: 21, nome: 'Tarefa 21', prazo: '2024-11-07'},
+                { id: 23, nome: 'Tarefa 23', prazo: '2024-11-07'},
+                { id: 25, nome: 'Tarefa 25', prazo: '2024-11-07'}
+            ];
+
+            const diasParaNotificar = 2;
+
+            function verificarPrazos() {
+                const agora = new Date();
+                const notificationsDiv = document.getElementById("notifications");
+
+                tarefas.forEach(tarefa => {
+                    const prazo = new Date(tarefa.prazo);
+                    const diferencaEmDias = (prazo - agora) / (1000 * 60 * 60 * 24);
+
+                    if (diferencaEmDias <= diasParaNotificar && diferencaEmDias >= 0) {
+                        const notification = document.createElement("div");
+                        notification.classList.add("notification");
+                        notification.textContent = `Atenção! A ${tarefa.nome} está próxima do prazo de conclusão (${tarefa.prazo}).`;
+                        notificationsDiv.appendChild(notification);
+                    }
+                });
+            }
+
+            window.onload = verificarPrazos;
+        </script>
+    </form>
+</body>
+</html>
